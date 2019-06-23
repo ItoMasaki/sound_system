@@ -47,6 +47,7 @@ class SoundSystem(Node):
 
     # speak content
     def speak(self, content):
+        print("[*] Speak : {0}".format(content))
         p = PyAudio()
         waves = self.picotts.synth_wav(content)
         wav = wave.open(BytesIO(waves))
