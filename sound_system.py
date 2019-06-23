@@ -2,13 +2,12 @@ import wave
 from io import BytesIO
 from pyaudio import PyAudio
 from picotts import PicoTTS
+from pocketsphinx import LiveSpeech
 
 import rclpy
 from rclpy.node import Node
-
-from std_msgs.msg import String
-
 from rclpy.qos import qos_profile_sensor_data
+from std_msgs.msg import String
 
 class SoundSystem(Node):
     def __init__(self):
@@ -22,6 +21,8 @@ class SoundSystem(Node):
         self.command = None
 
         self.picotts = PicoTTS()
+
+        self.live_speech = LiveSpeech()
 
     # recieve a command {Command, Content}
     def command_callback(self, msg):
@@ -42,11 +43,14 @@ class SoundSystem(Node):
             # Command:speak , Content:hello!
             command = msg.data.split(" , ")
 
-            if "speak" == command[0].strip("Command:"):
-                self.speak(command[1].strip("Content:"))
+            if "speak" == command[0].replace("Command:", ""):
+                self.Speak(command[1].replace("Content:", ""))
+
+            if "listen" == command[0].replace("Command:", ""):
+                self.Listen()
 
     # speak content
-    def speak(self, content):
+    def Speak(self, content):
         print("[*] Speak : {0}".format(content))
         p = PyAudio()
         waves = self.picotts.synth_wav(content)
@@ -67,7 +71,9 @@ class SoundSystem(Node):
 
     # [TODO] please build this function!
     def Listen(self):
-        pass
+        print("[*] Listening")
+        for phrase in self.live_speech:
+            print(phrase)
 
     # only one time execute
     def one_time_execute(self, now, previous):
