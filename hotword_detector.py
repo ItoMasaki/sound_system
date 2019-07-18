@@ -18,9 +18,9 @@ class HotwordDetector(Node):
         self.livespeech=LiveSpeech(
             lm=False,
             hmm=os.path.join(self.model_path, 'en-us'),
-            dic=os.path.join(self.dic_path,"ros2_sound_system_sphinx.dict"),
-	        jsgf=os.path.join(self.dic_path,"ros2_sound_system_sphinx.gram"),
-            kws_threshold=1e-10,
+            dic='/home/matsudayamato/python_ws/src/sound_system/dictionary/ros2_sound_system_sphinx.dict',
+	        jsgf='/home/matsudayamato/python_ws/src/sound_system/dictionary/ros2_sound_system_sphinx.gram',
+            kws_threshold=1e-30
             )
 
         self.init_detector()
@@ -29,8 +29,8 @@ class HotwordDetector(Node):
 
         print("Hotword detection start")
         for phrase in self.livespeech:
-            if phrase is None:
-                print("--"+phrase+"--")
+            if str(phrase)!="" :
+                print("--"+str(phrase)+"--")
                 self.publisher.publish(self.msg)
 def main():
     rclpy.init()
