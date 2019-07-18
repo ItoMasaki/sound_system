@@ -26,7 +26,6 @@ class HotwordDetector(Node):
         self.init_detector()
 
     def init_detector(self):
-
         print("Hotword detection start")
         for phrase in self.livespeech:
             if str(phrase)!="" :
