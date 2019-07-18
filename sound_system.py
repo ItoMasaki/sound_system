@@ -1,9 +1,9 @@
+import os
 import wave
 from io import BytesIO
 from pyaudio import PyAudio
 from picotts import PicoTTS
-from pocketsphinx import LiveSpeech
-
+from pocketsphinx import LiveSpeech,get_model_path
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
@@ -15,20 +15,25 @@ class SoundSystem(Node):
 
         self.create_subscription(String,\
                                  "sound_system/command",\
-                                 self.command_callback,\
-                                 qos_profile_sensor_data)
-
+                                 self.command_callback)
         self.command = None
 
         self.picotts = PicoTTS()
 
-        self.live_speech = LiveSpeech()
+        self.model_path = get_model_path()
+        self.dic_path = dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.dict"),
+        self.gram_path=  dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.gram"),
+        self.live_speech = LiveSpeech(
+            lm=False,
+            hmm=os.path.join(self.model_path, 'en-us'),
+            dic=self.dic_path,
+	        jsgf=self.gram_path)
 
     # recieve a command {Command, Content}
     def command_callback(self, msg):
         #+++++++++++++++++++++++++++++++#
         #
-        #   Data : 
+        #   Data :
         #       Type    : speak
         #       Content : ~~~~
         #
