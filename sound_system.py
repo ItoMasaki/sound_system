@@ -94,4 +94,3 @@ def main():
     rclpy.init()
     node = SoundSystem()
     rclpy.spin(node)
-    # this is test
