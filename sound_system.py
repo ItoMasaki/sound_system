@@ -17,17 +17,13 @@ class SoundSystem(Node):
                                  "sound_system/command",\
                                  self.command_callback)
         self.command = None
-
+        self.start_spr = False
         self.picotts = PicoTTS()
-
         self.model_path = get_model_path()
         self.dic_path = dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.dict"),
         self.gram_path=  dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.gram"),
-        self.live_speech = LiveSpeech(
-            lm=False,
-            hmm=os.path.join(self.model_path, 'en-us'),
-            dic=self.dic_path,
-	        jsgf=self.gram_path)
+        self.live_speech = None
+        self.pause()
 
     # recieve a command {Command, Content}
     def command_callback(self, msg):
@@ -47,12 +43,36 @@ class SoundSystem(Node):
 
             # Command:speak , Content:hello!
             command = msg.data.split(" , ")
+            
+            if "detect" == command[0].replace("Command:", ""):
+                print("Start spr")
+                self.start_spr = True
+                self.resume()
+                
+            while self.start_spr:
 
-            if "speak" == command[0].replace("Command:", ""):
-                self.Speak(command[1].replace("Content:", ""))
+                if "speak" == command[0].replace("Command:", ""):
+                    self.pause()
+                    self.Speak(command[1].replace("Content:", ""))
 
-            if "listen" == command[0].replace("Command:", ""):
-                self.Listen()
+                if "listen" == command[0].replace("Command:", ""):
+                    self.resume()
+                    self.Listen()
+           
+    def pause(self):
+        print("== STOP RECOGNITION ==")
+        self.live_speech = LiveSpeech(no_search=True)
+    
+    def resume(self):
+        print("== START RECOGNITION ==")
+        self.live_speech = LiveSpeech(
+            lm=False,
+            hmm=os.path.join(self.model_path, 'en-us'),
+            dic=self.dic_path,
+	        jsgf=self.gram_path,
+	        kws_threshold=1e-30,
+	        no_search=False,
+            )
 
     # speak content
     def Speak(self, content):
