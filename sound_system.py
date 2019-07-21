@@ -9,25 +9,20 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from std_msgs.msg import String
 
+
 class SoundSystem(Node):
     def __init__(self):
         super(SoundSystem, self).__init__("SoundSystem")
 
-        self.create_subscription(String,\
-                                 "sound_system/command",\
-                                 self.command_callback)
+        self.create_subscription(String, "sound_system/command", self.command_callback)
         self.command = None
 
         self.picotts = PicoTTS()
 
         self.model_path = get_model_path()
-        self.dic_path = dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.dict"),
-        self.gram_path=  dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.gram"),
-        self.live_speech = LiveSpeech(
-            lm=False,
-            hmm=os.path.join(self.model_path, 'en-us'),
-            dic=self.dic_path,
-	        jsgf=self.gram_path)
+        self.dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.dict"),
+        self.gram_path=  = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.gram"),
+        self.live_speech = LiveSpeech(lm=False, hmm=os.path.join(self.model_path, 'en-us'), dic=self.dic_path, jsgf=self.gram_path)
 
     # recieve a command {Command, Content}
     def command_callback(self, msg):
