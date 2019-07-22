@@ -31,12 +31,12 @@ class HotwordDetector(Node):
             hmm=os.path.join(self.model_path, 'en-us'),
             dic='/home/matsudayamato/python_ws/src/sound_system/dictionary/hey_ducker.dict',
 	        jsgf='/home/matsudayamato/python_ws/src/sound_system/dictionary/hey_ducker.gram',
-	        kws_threshold=1e-30,
+	        kws_threshold=1e-0,
 	        no_search=False,
             )
 
     def init_detector(self):
-
+        print('__file__:    ', __file__)
         print("Hotword detection start")
         self.resume()
         for phrase in self.live_speech:
