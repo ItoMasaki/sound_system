@@ -1,4 +1,0 @@
-#JSGF V1.0;
-grammar ros2_sound_system_sphinx;
-public <rule> = <command>;
-<command> = hey ducker;
