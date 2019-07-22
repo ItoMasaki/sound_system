@@ -3,10 +3,13 @@ import wave
 from io import BytesIO
 from pyaudio import PyAudio
 from picotts import PicoTTS
-from pocketsphinx import LiveSpeech,get_model_path
+
+from pocketsphinx import LiveSpeech, get_model_path
+
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
+
 from std_msgs.msg import String
 import snowboy.snowboydecoder
 import os
@@ -44,54 +47,58 @@ class HotwordDetector(Node):
                 self.publisher.publish(self.msg)
 
 
+
 class SoundSystem(Node):
     def __init__(self):
         super(SoundSystem, self).__init__("SoundSystem")
 
-        self.create_subscription(String,\
-                                 "sound_system/command",\
-                                 self.command_callback)
+        # ROS2
+        self.create_subscription(String, "sound_system/command", self.command_callback, qos_profile_sensor_data)
         self.command = None
-
+        # Speak
         self.picotts = PicoTTS()
-
+        # Pocketsphinx
+        self.hotword_dic_path = "sound_system/dictionary/hey_ducker.dict"
+        self.hotword_gram_path = "sound_system/dictionary/hey_ducker.gram"
         self.model_path = get_model_path()
-        self.dic_path = dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.dict"),
-        self.gram_path=  dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary/ros2_sound_system_sphinx.gram"),
-        self.live_speech = LiveSpeech(
-            lm=False,
-            hmm=os.path.join(self.model_path, 'en-us'),
-            dic=self.dic_path,
-	        jsgf=self.gram_path)
 
 
     # recieve a command {Command, Content}
     def command_callback(self, msg):
-        #+++++++++++++++++++++++++++++++#
-        #
-        #   Data :
-        #       Type    : speak
-        #       Content : ~~~~
-        #
-        #
-        #+++++++++++++++++++++++++++++++#
 
-
+        # if msg.data is defferent from self.command, one time execute command recieved.
         if self.one_time_execute(msg.data, self.command):
 
             self.command = msg.data
 
-            # Command:speak , Content:hello!
+            # split " , "
             command = msg.data.split(" , ")
-
+            
+            if "detect" == command[0].replace("Command:", ""):
+                self.detect()
+                
             if "speak" == command[0].replace("Command:", ""):
-                self.Speak(command[1].replace("Content:", ""))
+                self.speak(command[1].replace("Content:", ""))
 
             if "listen" == command[0].replace("Command:", ""):
-                self.Listen()
+                self.listen()
+           
+
+    def detect(self):
+        print("[*] Start Recognition")
+        self.setup_live_speech(False, self.hotword_dic_path, self.hotword_gram_path, 1e-20)
+
+        for phrase in self.live_speech:
+            if "hey ducker" == str(phrase):
+                self.speak("yes sir !")
+                self.live_speech.stop = True
+                del(self.live_speech)
+                break
+
+
 
     # speak content
-    def Speak(self, content):
+    def speak(self, content):
         print("[*] Speak : {0}".format(content))
         p = PyAudio()
         waves = self.picotts.synth_wav(content)
@@ -111,10 +118,25 @@ class SoundSystem(Node):
         p.terminate()
 
     # [TODO] please build this function!
-    def Listen(self):
+    def listen(self):
         print("[*] Listening")
+        self.live_speech = LiveSpeech(lm=False,
+                                      hmm=os.path.join(self.model_path, 'en-us'),
+                                      dic=self.dic_path,
+                                      jsgf=self.gram_path,
+                                      kws_threshold=1e-20)
+
         for phrase in self.live_speech:
             print(phrase)
+
+
+    def setup_live_speech(self, lm, dict_path, jsgf_path, kws_threshold):
+        self.live_speech = LiveSpeech(lm=lm,
+                                      hmm=os.path.join(self.model_path, 'en-us'),
+                                      dic=dict_path,
+                                      jsgf=jsgf_path,
+                                      kws_threshold=kws_threshold)
+
 
     # only one time execute
     def one_time_execute(self, now, previous):
