@@ -8,7 +8,6 @@ setup(
     packages=[],
     py_modules=[
         "sound_system",
-        "hotword_detector"
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -29,7 +28,6 @@ setup(
     entry_points={
         'console_scripts': [
             'sound_system = sound_system:main',
-            'hotword_detector = hotword_detector:main'
         ],
     },
 )
