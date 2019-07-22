@@ -23,14 +23,14 @@ class HotwordDetector(Node):
     def pause(self):
         print("== STOP RECOGNITION ==")
         self.live_speech = LiveSpeech(no_search=True)
-        
+
     def resume(self):
         print("== START RECOGNITION ==")
         self.live_speech = LiveSpeech(
             lm=False,
             hmm=os.path.join(self.model_path, 'en-us'),
-            dic='/home/hirose/ros2_ws/src/sound_system/dictionary/ros2_sound_system_sphinx.dict',
-	        jsgf='/home/hirose/ros2_ws/src/sound_system/dictionary/ros2_sound_system_sphinx.gram',
+            dic='/home/matsudayamato/python_ws/src/sound_system/dictionary/hey_ducker.dict',
+	        jsgf='/home/matsudayamato/python_ws/src/sound_system/dictionary/hey_ducker.gram',
 	        kws_threshold=1e-30,
 	        no_search=False,
             )
