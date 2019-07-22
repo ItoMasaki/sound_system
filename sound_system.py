@@ -3,7 +3,6 @@ import wave
 from io import BytesIO
 from pyaudio import PyAudio
 from picotts import PicoTTS
-
 from pocketsphinx import LiveSpeech, get_model_path
 
 import rclpy
@@ -11,41 +10,6 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 
 from std_msgs.msg import String
-import snowboy.snowboydecoder
-import os
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import String
-from pocketsphinx import LiveSpeech,get_model_path
-
-class HotwordDetector(Node):
-    def __init__(self):
-        super().__init__("HotwordDetector")
-
-        self.publisher=self.create_publisher(String,"sound_sytem/command")
-
-        self.msg=String()
-        self.msg.data="Command:speak , Content:hello!"
-        self.model_path=get_model_path()
-        self.dic_path = dic_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"dictionary")
-        self.livespeech=LiveSpeech(
-            lm=False,
-            hmm=os.path.join(self.model_path, 'en-us'),
-            dic='/home/matsudayamato/python_ws/src/sound_system/dictionary/ros2_sound_system_sphinx.dict',
-	        jsgf='/home/matsudayamato/python_ws/src/sound_system/dictionary/ros2_sound_system_sphinx.gram',
-            kws_threshold=1e-30
-            )
-
-        self.init_detector()
-
-    def init_detector(self):
-
-        print("Hotword detection start")
-        for phrase in self.livespeech:
-            if str(phrase)!="" :
-                print("--"+str(phrase)+"--")
-                self.publisher.publish(self.msg)
-
 
 
 class SoundSystem(Node):
@@ -54,6 +18,7 @@ class SoundSystem(Node):
 
         # ROS2
         self.create_subscription(String, "sound_system/command", self.command_callback, qos_profile_sensor_data)
+        self.publisher = None
         self.command = None
         # Speak
         self.picotts = PicoTTS()
@@ -74,6 +39,9 @@ class SoundSystem(Node):
             # split " , "
             command = msg.data.split(" , ")
             
+            if "setup" == command[0].replace("Command:", ""):
+                self.setup_topic(command[1].replace("Content:", ""))
+
             if "detect" == command[0].replace("Command:", ""):
                 self.detect()
                 
@@ -84,8 +52,9 @@ class SoundSystem(Node):
                 self.listen()
            
 
+    # detect hotword
     def detect(self):
-        print("[*] Start Recognition")
+        print("[*] START HOTWORD RECOGNITION")
         self.setup_live_speech(False, self.hotword_dic_path, self.hotword_gram_path, 1e-20)
 
         for phrase in self.live_speech:
@@ -96,10 +65,9 @@ class SoundSystem(Node):
                 break
 
 
-
     # speak content
     def speak(self, content):
-        print("[*] Speak : {0}".format(content))
+        print("[*] SPEAK : {0}".format(content))
         p = PyAudio()
         waves = self.picotts.synth_wav(content)
         wav = wave.open(BytesIO(waves))
@@ -117,9 +85,10 @@ class SoundSystem(Node):
         stream.close()
         p.terminate()
 
+
     # [TODO] please build this function!
     def listen(self):
-        print("[*] Listening")
+        print("[*] LISTENING ...")
         self.live_speech = LiveSpeech(lm=False,
                                       hmm=os.path.join(self.model_path, 'en-us'),
                                       dic=self.dic_path,
@@ -130,12 +99,18 @@ class SoundSystem(Node):
             print(phrase)
 
 
+    # setup livespeech
     def setup_live_speech(self, lm, dict_path, jsgf_path, kws_threshold):
         self.live_speech = LiveSpeech(lm=lm,
                                       hmm=os.path.join(self.model_path, 'en-us'),
                                       dic=dict_path,
                                       jsgf=jsgf_path,
                                       kws_threshold=kws_threshold)
+
+    # setup publisher for return to root topic
+    def setup_topic(self, topic_name):
+        print("[*] CREATE PUBLISHER : TOPIC NAME IS [{0}]".format(topic_name))
+        self.publisher = self.create_publisher(String, topic_name, qos_profile_sensor_data)
 
 
     # only one time execute
