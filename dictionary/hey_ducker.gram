@@ -1,0 +1,4 @@
+#JSGF V1.0;
+grammar hey_ducker;
+public <rule> = <command>;
+<command> = hey ducker;
