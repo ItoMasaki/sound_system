@@ -48,10 +48,12 @@ class SoundSystem(Node):
                 self.listen()
            
 
+    # hotword detect is made of pocketsphinx.
     def detect(self):
         print("[*] Start Recognition")
         self.setup_live_speech(False, self.hotword_dic_path, self.hotword_gram_path, 1e-20)
 
+        # if detect hotword, delete live_speech
         for phrase in self.live_speech:
             if "hey ducker" == str(phrase):
                 self.speak("yes sir !")
@@ -81,6 +83,7 @@ class SoundSystem(Node):
         stream.close()
         p.terminate()
 
+
     # [TODO] please build this function!
     def listen(self):
         print("[*] Listening")
@@ -94,6 +97,7 @@ class SoundSystem(Node):
             print(phrase)
 
 
+    # setup live_speech
     def setup_live_speech(self, lm, dict_path, jsgf_path, kws_threshold):
         self.live_speech = LiveSpeech(lm=lm,
                                       hmm=os.path.join(self.model_path, 'en-us'),
