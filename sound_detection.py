@@ -30,20 +30,21 @@ class SoundDetection(Node):
         self.dic_path=dic_path
         self.gram_path=gram_path
         self.hmm=os.path.join(get_model_path,'en-us')
+
+        self.speech=None
         self.get_array()
 
     def get_array(self):
         if dev:
-            speech=self.setup_live_speech(False,self.hmm,self.dic_path,self,gram_path,1e-20)
+            self.speech=self.setup_live_speech(False,self.hmm,self.dic_path,self,gram_path,1e-20)
             while True:
-                try:
-                    if read('SPEECHDETECTED')==1:
-                        for kw in speech:
-                            temp=direction()
-                            if kw !=" ":
-                                self.cnt+=1
-                                print(cnt+":"+temp,flush=True)
-                                self.pub.publish(temp)
+                if read('SPEECHDETECTED')==1:
+                    for kw in self.speech:
+                        temp=direction()
+                        if kw !=" ":
+                            self.cnt+=1
+                            print(cnt+":"+temp,flush=True)
+                            self.pub.publish(temp)
 
     @staticmethod
     def setup_live_speech(self, lm,hmm, dict_path, jsgf_path, kws_threshold):
