@@ -18,7 +18,6 @@ class SoundSystem(Node):
 
         # ROS2
         self.create_subscription(String, "sound_system/command", self.command_callback, qos_profile_sensor_data)
-        self.create_subscription(Float64, "sound_system/direction", self.direction_callback, qos_profile_sensor_data)
         self.command = None
         # Speak
         self.picotts = PicoTTS()
@@ -27,6 +26,7 @@ class SoundSystem(Node):
         self.hotword_gram_path = "sound_system/dictionary/hey_ducker.gram"
         self.model_path = get_model_path()
         # respeaker
+        self.dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
         self.conter = 0
 
 
@@ -122,8 +122,6 @@ class SoundSystem(Node):
     @staticmethod
     def read(param_name):
 
-		dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
-
         try:
             data = PARAMETERS[param_name]
         except KeyError:
@@ -138,18 +136,18 @@ class SoundSystem(Node):
         length = 8
 
         try:
-        	response = dev.ctrl_transfer(
-        	    usb.util.CTRL_IN | usb.util.CTRL_TYPE_VENDOR | usb.util.CTRL_RECIPIENT_DEVICE,
-        	    0, cmd, id, length, TIMEOUT)
+            response = dev.ctrl_transfer(
+                usb.util.CTRL_IN | usb.util.CTRL_TYPE_VENDOR | usb.util.CTRL_RECIPIENT_DEVICE,
+                0, cmd, id, length, TIMEOUT)
 
-        	response = struct.unpack(b'ii', response.tostring())
+            response = struct.unpack(b'ii', response.tostring())
 
-        	if data[2] == 'int':
-        	    result = response[0]
-        	else:
-        	    result = response[0] * (2. ** response[1])
-		except:
-			result = 0
+            if data[2] == 'int':
+                result = response[0]
+            else:
+                result = response[0] * (2. ** response[1])
+	    except:
+	        result = 0
 
         return result
 
