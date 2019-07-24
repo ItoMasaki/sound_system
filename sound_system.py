@@ -18,7 +18,6 @@ class SoundSystem(Node):
 
         # ROS2
         self.create_subscription(String, "sound_system/command", self.command_callback, qos_profile_sensor_data)
-        self.publisher = None
         self.command = None
         # Speak
         self.picotts = PicoTTS()
@@ -59,6 +58,7 @@ class SoundSystem(Node):
 
         # if detect hotword, delete live_speech
         for phrase in self.live_speech:
+            print(phrase)
             if "hey ducker" == str(phrase):
                 self.speak("yes sir !")
                 self.live_speech.stop = True
