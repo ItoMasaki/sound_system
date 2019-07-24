@@ -8,8 +8,8 @@ from pocketsphinx import LiveSpeech, get_model_path
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
-
-from std_msgs.msg import String
+from std_msgs.msg import String,Float64
+from threading import Thread
 
 
 class SoundSystem(Node):
@@ -18,6 +18,7 @@ class SoundSystem(Node):
 
         # ROS2
         self.create_subscription(String, "sound_system/command", self.command_callback, qos_profile_sensor_data)
+        self.create_subscription(Float64, "sound_system/direction", self.direction_callback, qos_profile_sensor_data)
         self.command = None
         # Speak
         self.picotts = PicoTTS()
@@ -37,19 +38,19 @@ class SoundSystem(Node):
 
             # split " , "
             command = msg.data.split(" , ")
-            
+
             if "setup" == command[0].replace("Command:", ""):
                 self.setup_topic(command[1].replace("Content:", ""))
 
             if "detect" == command[0].replace("Command:", ""):
                 self.detect()
-                
+
             if "speak" == command[0].replace("Command:", ""):
                 self.speak(command[1].replace("Content:", ""))
 
             if "listen" == command[0].replace("Command:", ""):
                 self.listen(command[1].replace("Content:", ""))
-           
+
 
     # detect hotword
     def detect(self):
@@ -100,7 +101,7 @@ class SoundSystem(Node):
             self.setup_live_speech(False, None, None, 1e-20)
         else:
             self.setup_live_speech(False, dict_path, gram_path, 1e-20)
-        
+
         print("[*] LISTENING ...")
 
         for phrase in self.live_speech:
@@ -115,6 +116,9 @@ class SoundSystem(Node):
                                       jsgf=jsgf_path,
                                       kws_threshold=kws_threshold)
 
+
+    def direction_callback(self,angular):
+        print(angular,flush=True)
 
     # setup publisher for return to root topic
     def setup_topic(self, topic_name):
