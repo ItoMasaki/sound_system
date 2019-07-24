@@ -26,6 +26,8 @@ class SoundSystem(Node):
         self.hotword_dic_path = "sound_system/dictionary/hey_ducker.dict"
         self.hotword_gram_path = "sound_system/dictionary/hey_ducker.gram"
         self.model_path = get_model_path()
+        # respeaker
+        self.conter = 0
 
 
     # recieve a command {Command, Content}
@@ -97,15 +99,65 @@ class SoundSystem(Node):
         gram_path = path + ".gram"
 
         # setup live_speech
-        if file_name == "":
-            self.setup_live_speech(False, None, None, 1e-20)
-        else:
-            self.setup_live_speech(False, dict_path, gram_path, 1e-20)
+        self.setup_live_speech(False, dict_path, gram_path, 1e-20)
 
         print("[*] LISTENING ...")
 
-        for phrase in self.live_speech:
-            print(phrase)
+        self.get_array()
+
+
+    # get array from respeaker
+    def get_array(self):
+        while True:
+            if read('SPEECHDETECTED') == 1:
+                for kw in self.speech:
+                    direction = self.direction()
+                    if kw ! = " ":
+                        self.counter += 1
+                        print(self.counter + ":" + direction, flush=True)
+                        self.pub.publish(temp)
+
+
+    # read buffer data from respeaker
+    @staticmethod
+    def read(param_name):
+
+		dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
+
+        try:
+            data = PARAMETERS[param_name]
+        except KeyError:
+            return
+
+        id = data[0]
+
+        cmd = 0x80 | data[1]
+        if data[2] == 'int':
+            cmd |= 0x40
+
+        length = 8
+
+        try:
+        	response = dev.ctrl_transfer(
+        	    usb.util.CTRL_IN | usb.util.CTRL_TYPE_VENDOR | usb.util.CTRL_RECIPIENT_DEVICE,
+        	    0, cmd, id, length, TIMEOUT)
+
+        	response = struct.unpack(b'ii', response.tostring())
+
+        	if data[2] == 'int':
+        	    result = response[0]
+        	else:
+        	    result = response[0] * (2. ** response[1])
+		except:
+			result = 0
+
+        return result
+
+
+    # get direction
+    @staticmethod
+    def direction():
+        read('DOAANGLE')
 
 
     # setup livespeech
@@ -116,9 +168,6 @@ class SoundSystem(Node):
                                       jsgf=jsgf_path,
                                       kws_threshold=kws_threshold)
 
-
-    def direction_callback(self,angular):
-        print(angular,flush=True)
 
     # setup publisher for return to root topic
     def setup_topic(self, topic_name):
