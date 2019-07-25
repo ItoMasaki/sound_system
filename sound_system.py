@@ -43,8 +43,8 @@ class SoundSystem(Node):
         # Speak
         self.picotts = PicoTTS()
         # Pocketsphinx
-        self.hotword_dic_path = "/home/matsudayamato/python_ws/src/sound_system/dictionary/hey_ducker.dict"
-        self.hotword_gram_path = "/home/matsudayamato/python_ws/src/sound_system/dictionary/hey_ducker.gram"
+        self.hotword_dic_path = "sound_system/dictionary/hey_ducker.dict"
+        self.hotword_gram_path = "sound_system/dictionary/hey_ducker.gram"
         self.model_path = get_model_path()
         # respeaker
         self.dev = usb.core.find(idVendor=0x2886, idProduct=0x0018)
