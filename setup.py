@@ -8,8 +8,9 @@ setup(
     packages=[],
     py_modules=[
         "sound_system",
+        "sound_detection"
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools','pyusb','click'],
     zip_safe=True,
     author='ItoMasaki,MatudaYamato',
     author_email='is0449sh@ed.ritsumei.ac.jp',
@@ -28,6 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'sound_system = sound_system:main',
+            'sound_detection = sound_detection:main'
         ],
     },
 )
