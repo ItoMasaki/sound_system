@@ -6,6 +6,7 @@ from picotts import PicoTTS
 
 picotts = PicoTTS()
 
+#speak content
 def speak(content):
     print("[*] SPEAK : {0}".format(content))
     p = PyAudio()
