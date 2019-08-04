@@ -32,6 +32,7 @@ def angular():
                         counter += 1
                         print(str(counter) + ":" + str(angular), flush=True)
                         #self.pub.publish(float(angular))
+    return angular
 
 # read buffer data from respeaker
 @staticmethod
