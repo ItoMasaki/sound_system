@@ -35,6 +35,7 @@ def QandA():
     # setup live_speech
     setup_live_speech(False, dict_path, gram_path, 1e-10)
     global live_speech
+    
     # if I have a question witch I can answer, count 1
     while counter < 5:
         print("\n[*] LISTENING ...")
