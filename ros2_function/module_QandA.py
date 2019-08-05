@@ -1,12 +1,6 @@
 import os
-import wave
-from io import BytesIO
-from pyaudio import PyAudio
-from picotts import PicoTTS
 from pocketsphinx import LiveSpeech, get_model_path
-
 import csv
-
 import module_speak
 
 counter = 0
