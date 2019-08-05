@@ -26,25 +26,25 @@ def QandA():
     global counter
     global qa_dict
     global noise_words
+    global live_speech
     
     #noise list
     noise_words = read_noise_word()
     # make dict and gram files path
     dict_path = spr_dic_path
     gram_path = spr_gram_path
-    # setup live_speech
-    setup_live_speech(False, dict_path, gram_path, 1e-10)
-    global live_speech
     
     # if I have a question witch I can answer, count 1
     while counter < 5:
         print("\n[*] LISTENING ...")
+        # setup live_speech
+        setup_live_speech(False, dict_path, gram_path, 1e-10)
         for question in live_speech:
             if str(question) not in noise_words:
                 if str(question) in qa_dict.keys():
                     print("\n-------your question--------\n",str(question),"\n----------------------------\n")
                     print("\n-----------answer-----------\n",qa_dict[str(question)],"\n----------------------------\n")
-                    live_speech.stop = True
+                    pause()
                     module_speak.speak(qa_dict[str(question)])
                     counter += 1
                     break
@@ -52,6 +52,11 @@ def QandA():
             else:
                 print(".*._noise_.*.")
                 break
+
+def pause():
+    global live_speech
+    live_speech = LiveSpeech(no_search=True)
+    
 
 #make noise list
 def read_noise_word():
