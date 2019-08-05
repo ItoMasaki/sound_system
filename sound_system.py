@@ -24,35 +24,33 @@ class SoundSystem(Node):
     # recieve a command {Command, Content}
     def command_callback(self, msg):
 
-        if self.one_time_execute(msg.data, self.command):
+        self.command = msg.data
+        command = msg.data.split(",")
 
-            self.command = msg.data
-            command = msg.data.split(",")
+        if "detect" == command[0].replace("Command:", ""):
+            if module_detect.detect()==1:
+                self.cerebrum_publisher("Return:1,Content:None")
+            else:
+                self.cerebrum_publisher("Return:0,Content:None")
+   
+        if "speak" == command[0].replace("Command:", ""):
+            if module_speak.speak(command[1].replace("Content:", ""))==1:
+                self.cerebrum_publisher("Return:1,Content:None")
+            else:
+                self.cerebrum_publisher("Return:0,Content:None")
 
-            if "detect" == command[0].replace("Command:", ""):
-                if module_detect.detect()==1:
-                    self.cerebrum_publisher("Return:1,Content:None")
-                else:
-                    self.cerebrum_publisher("Return:0,Content:None")
-        
-            if "speak" == command[0].replace("Command:", ""):
-                if module_speak.speak(command[1].replace("Content:", ""))==1:
-                    self.cerebrum_publisher("Return:1,Content:None")
-                else:
-                    self.cerebrum_publisher("Return:0,Content:None")
+        if "angular" == command[0].replace("Command:", ""):
+            self.temp_angular=module_angular.angular()
+            if self.temp_angular>0:
+                self.cerebrum_publisher("Return:1,Content:"+str(self.temp_angular))
+            else:
+                self.cerebrum_publisher("Return:0,Content:None")
 
-            if "angular" == command[0].replace("Command:", ""):
-                self.temp_angular=module_angular.angular()
-                if self.temp_angular>0:
-                    self.cerebrum_publisher("Return:1,Content:"+str(self.temp_angular))
-                else:
-                    self.cerebrum_publisher("Return:0,Content:None")
-
-            if "QandA" == command[0].replace("Command:",""):
-                if module_QandA.QandA(command[1].replace("Content:",""))==1:
-                    self.cerebrum_publisher("Retern:0,Content:None")
-                else:
-                    self.cerebrum_publisher("Return:0.Content:None")
+        if "QandA" == command[0].replace("Command:",""):
+            if module_QandA.QandA(command[1].replace("Content:",""))==1:
+                self.cerebrum_publisher("Retern:0,Content:None")
+            else:
+                self.cerebrum_publisher("Return:0.Content:None")
 
 
     def cerebrum_publisher(self,message):
