@@ -16,36 +16,51 @@ with open('../Q&A/q&a.csv', 'r') as f:
         qa_dict.setdefault(str(line[0]), str(line[1]))
 
 # listen question
-def QandA():
+def QandA(person=None):
     global counter
     global qa_dict
     global noise_words
     global live_speech
-    
-    #noise list
-    noise_words = read_noise_word()
-    # make dict and gram files path
-    dict_path = spr_dic_path
-    gram_path = spr_gram_path
-    
-    # if I have a question witch I can answer, count 1
-    while counter < 5:
-        print("\n[*] LISTENING ...")
-        # setup live_speech
-        setup_live_speech(False, dict_path, gram_path, 1e-10)
-        for question in live_speech:
-            if str(question) not in noise_words:
-                if str(question) in qa_dict.keys():
-                    print("\n-------your question--------\n",str(question),"\n----------------------------\n")
-                    print("\n-----------answer-----------\n",qa_dict[str(question)],"\n----------------------------\n")
-                    pause()
-                    module_speak.speak(qa_dict[str(question)])
-                    counter += 1
-                    break
-            #noise
-            else:
-                print(".*._noise_.*.")
-                break
+    if person != None:
+        person = person.split("|")
+        if person[0] != "1" and person[1] != "1":
+            person_number = "There are {} people, the number of men are {}, the number of femen are {}.".format((int(person[0]) + int(person[1])), person[0], person[1])
+        elif person[0] != "1":
+            person_number = "There are {} people, the number of men are {}, the number of femen is 1.".format((int(person[0]) + int(person[1])), person[0])
+        elif person[1] != "1":
+            person_number = "There are {} people, the number of men is 1, the number of femen are {}.".format(int(person[0]) + int(person[1]), person[1])
+
+        print(person_number)
+        module_speak.speak(person_number)
+        
+    else:                    
+        #noise list
+        noise_words = read_noise_word()
+        # make dict and gram files path
+        dict_path = spr_dic_path
+        gram_path = spr_gram_path
+        
+        # if I have a question witch I can answer, count 1
+        while counter < 2:
+            print("\n[*] LISTENING ...")
+            # setup live_speech
+            setup_live_speech(False, dict_path, gram_path, 1e-10)
+            for question in live_speech:
+                if str(question) not in noise_words:
+                    if str(question) in qa_dict.keys():
+                        print("\n-------your question--------\n",str(question),"\n----------------------------\n")
+                        print("\n-----------answer-----------\n",qa_dict[str(question)],"\n----------------------------\n")
+                        pause()
+                        module_speak.speak(qa_dict[str(question)])
+                        counter += 1
+                        break
+                #noise
+                else:
+                    print(".*._noise_.*.")
+                    print("\n[*] LISTENING ...")
+                    pass
+    #counter += 1 
+    #return counter
 
 def pause():
     global live_speech
