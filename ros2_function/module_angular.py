@@ -8,9 +8,20 @@ import os
 import sys
 import struct
 
-model_path = get_model_path()
-counter = 0
+from pocketsphinx import LiveSpeech, get_model_path
 
+
+file_path = os.path.abspath(__file__)
+
+hotword_dic_path = file_path.replace(
+    'ros2_function/module_angular.py', '/dictionary/hey_ducker.dict')
+hotword_gram_path = file_path.replace(
+    'ros2_function/module_angular.py', '/dictionary/hey_ducker.gram')
+
+
+model_path = get_model_path()
+
+live_speech=None
 dev = usb.core.find(idVendor=0x2886,idProduct=0x0018)
 
 PARAMETERS = {
@@ -21,21 +32,24 @@ PARAMETERS = {
 
 TIMEOUT = 100000
 
-# get array from respeaker
-def angular():
-    while True:
-        if read('SPEECHDETECTED') == 1:
-            while i < 5:
-                for kw in live_speech:
-                    angular = direction()
-                    if kw != " ":
-                        counter += 1
-                        print(str(counter) + ":" + str(angular), flush=True)
-                        #self.pub.publish(float(angular))
-    return angular
 
-# read buffer data from respeaker
-@staticmethod
+def angular():
+    global live_speech
+    setup_live_speech(
+        False,
+        hotword_dic_path,
+        hotword_gram_path,
+        1e-20)
+    while True:
+        counter = 0
+        if read('SPEECHDETECTED') == 1:
+            for kw in live_speech:
+                angular = direction()
+                if kw != ' ':
+                    counter += 1
+                    print(str(counter) + ':' + str(angular), flush=True)
+                    return angular
+
 def read(param_name):
 
     try:
@@ -65,9 +79,21 @@ def read(param_name):
 
     return result
 
-# get direction
-def direction(self):
-    return read('DOAANGLE')  
+
+def direction():
+    return read('DOAANGLE')
+
+# setup livespeech
+
+
+def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
+    global live_speech
+    live_speech = LiveSpeech(lm=lm,
+                             hmm=os.path.join(model_path, 'en-us'),
+                             dic=dict_path,
+                             jsgf=jsgf_path,
+                             kws_threshold=kws_threshold)
+
 
 if __name__ == '__main__':
-    angular()                                           
+    angular()

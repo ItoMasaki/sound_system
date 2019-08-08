@@ -2,7 +2,7 @@ import os
 
 from pocketsphinx import LiveSpeech, get_model_path
 
-from .import module_speak
+from . import module_speak
 
 file_path = os.path.abspath(__file__)
 

@@ -8,7 +8,7 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 
-#from ros2_function import module_angular
+from ros2_function import module_angular
 
 from ros2_function import module_QandA
 
@@ -56,7 +56,7 @@ class SoundSystem(Node):
                 self.cerebrum_publisher('Return:0,Content:None')
 
         if 'QandA' == command[0].replace('Command:', ''):
-            if module_QandA.QandA(command[1].replace('Content:', '')) == 1:
+            if module_QandA.QandA() == 1:
                 self.cerebrum_publisher('Retern:0,Content:None')
             else:
                 self.cerebrum_publisher('Return:0.Content:None')
