@@ -1,26 +1,31 @@
 import os
 from pocketsphinx import LiveSpeech, get_model_path
 import csv
-import module_speak
+from . import module_speak
 
 counter = 0
 qa_dict = {}
 noise_words = []
-
-spr_dic_path = "../dictionary/spr_question.dict"
-spr_gram_path = "../dictionary/spr_question.gram"
+file_path = os.path.abspath(__file__)
+spr_dic_path = file_path.replace(
+    'ros2_function/module_QandA.py', 'dictionary/spr_question.dict')
+spr_gram_path = file_path.replace(
+    'ros2_function/module_QandA.py', 'dictionary/spr_question.gram')
 model_path = get_model_path()
-
-with open('../Q&A/q&a.csv', 'r') as f: 
+csv_path = file_path.replace(
+    'ros2_function/module_QandA.py', 'dictionary/QandA/qanda.csv')
+with open(csv_path, 'r') as f:
     for line in csv.reader(f):
         qa_dict.setdefault(str(line[0]), str(line[1]))
 
 # listen question
 def QandA(person=None):
+
     global counter
     global qa_dict
     global noise_words
     global live_speech
+
     if person != None:
         person = person.split("|")
         if person[0] != "1" and person[1] != "1":
@@ -62,12 +67,14 @@ def QandA(person=None):
     #counter += 1 
     #return counter
 
+
+
 def pause():
     global live_speech
     live_speech = LiveSpeech(no_search=True)
-    
 
-#make noise list
+
+# make noise list
 def read_noise_word():
     words = []
     with open(spr_gram_path) as f:
@@ -76,11 +83,14 @@ def read_noise_word():
                 continue
             if "<rule>" in line:
                 continue
-            line = line.replace("<noise>", "").replace("=", "").replace(" ", "").replace("\n", "").replace(";", "")
+            line = line.replace("<noise>", "").replace("=", "").replace(
+                " ", "").replace("\n", "").replace(";", "")
             words = line.split("|")
     return words
 
 # setup livespeech
+
+
 def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
     global live_speech
     live_speech = LiveSpeech(lm=lm,
@@ -88,6 +98,7 @@ def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
                              dic=dict_path,
                              jsgf=jsgf_path,
                              kws_threshold=kws_threshold)
+
 
 if __name__ == '__main__':
     QandA()
