@@ -5,7 +5,7 @@ import pyttsx3
 
 #speak content
 def speak(content):
-    print("[*] SPEAK : {0}".format(content))
+    print("[*] SPEAK : {0}".format(content),flush=True)
     engine=pyttsx3.init()
     rate=engine.getProperty('rate')
     engine.setProperty('rate', 150)
