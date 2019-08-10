@@ -3,17 +3,21 @@
 import os
 import csv
 
-dictionary_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dictionary')
-q_a_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Q&A')
+#dictionary_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dictionary')
+#q_a_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Q&A')
 name = input("作りたい辞書の名前を入力してください:")
 csv_file = input('辞書にしたいcsvファイル名を入力してください(.csvは含まず)：') # csvファイルを入力
 txt_file = input('加えたいノイズ１欄のtxtファイル名を入力してください(.txtは含まず)：') # txtファイルを入力
 
-PATH0 = os.path.join(q_a_directory_path, '{}.csv').format(csv_file) # 用意したq&aファイルの絶対パス
-PATH1 = os.path.join(dictionary_directory_path, 'cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
-PATH2 = os.path.join(dictionary_directory_path, '{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
-PATH3 = os.path.join(dictionary_directory_path, '{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
-PATH4 = os.path.join(dictionary_directory_path, '{}.txt').format(txt_file) # 用意したノイズファイルの絶対パス
+
+file_path = os.path.abspath(__file__)
+
+# Define path
+PATH0 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'QandA/{}.csv').format(csv_file) # 用意したq&aファイルの絶対パス
+PATH1 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'dictionary/cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
+PATH2 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'dictionary/{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
+PATH3 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'dictionary/{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
+PATH4 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'dictionary/{}.txt').format(txt_file) # 用意したノイズファイルの絶対パス
 
 if os.path.exists(PATH2):
     print("同じ辞書名が存在します。")

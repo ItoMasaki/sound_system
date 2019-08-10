@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 #-*- coding: utf-8 -*-
 import os
-dictionary_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dictionary')
+#dictionary_directory_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dictionary')
 name = input("ノイズを変更したい辞書の名前を入力してください:")
 txt_file = input('変更したいノイズ１欄のtxtファイル名を入力してください(.txtは含まず)：') # txtファイルを入力
 
-PATH1 = os.path.join(dictionary_directory_path, 'cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
-PATH2 = os.path.join(dictionary_directory_path, '{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
-PATH3 = os.path.join(dictionary_directory_path, '{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
-PATH4 = os.path.join(dictionary_directory_path, '{}.txt').format(txt_file) # 用意したノイズファイルの絶対パス
+
+
+file_path = os.path.abspath(__file__)
+
+# Define path
+PATH1 = file_path.replace('setup_modules/gram_noise_changer.py', 'dictionary/cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
+PATH2 = file_path.replace('setup_modules/gram_noise_changer.py', 'dictionary/{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
+PATH3 = file_path.replace('setup_modules/gram_noise_changer.py', 'dictionary/{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
+PATH4 = file_path.replace('setup_modules/gram_noise_changer.py', 'dictionary/{}.txt').format(txt_file) # 用意したノイズファイルの絶対パス
 
 if os.path.exists(PATH2):
     if os.path.exists(PATH4):
