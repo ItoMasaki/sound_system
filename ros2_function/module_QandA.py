@@ -1,12 +1,14 @@
 import os
 from pocketsphinx import LiveSpeech, get_model_path
 import csv
-from . import module_speak
+from .import module_speak
 
 counter = 0
-qa_dict = {}
+question_dictionary = {}
 noise_words = []
 file_path = os.path.abspath(__file__)
+
+# Define path
 spr_dic_path = file_path.replace(
     'ros2_function/module_QandA.py', 'dictionary/spr_question.dict')
 spr_gram_path = file_path.replace(
@@ -14,52 +16,51 @@ spr_gram_path = file_path.replace(
 model_path = get_model_path()
 csv_path = file_path.replace(
     'ros2_function/module_QandA.py', 'dictionary/QandA/qanda.csv')
+
+# Make a dictionary from a csv file
 with open(csv_path, 'r') as f:
     for line in csv.reader(f):
-        qa_dict.setdefault(str(line[0]), str(line[1]))
+        question_dictionary.setdefault(str(line[0]), str(line[1]))
 
-# listen question
+# Listen question, or speak the number of men and women
 def QandA(person=None):
 
     global counter
-    global qa_dict
+    global question_dictionary
     global noise_words
     global live_speech
 
+    # Speak the number of men and women, person = "the number of men|the number of women"
     if person != None:
         person = person.split("|")
-        if person[0] != "1" and person[1] != "1":
-            person_number = "There are {} people, the number of men are {}, the number of femen are {}.".format((int(person[0]) + int(person[1])), person[0], person[1])
-        elif person[0] != "1":
-            person_number = "There are {} people, the number of men are {}, the number of femen is 1.".format((int(person[0]) + int(person[1])), person[0])
-        elif person[1] != "1":
-            person_number = "There are {} people, the number of men is 1, the number of femen are {}.".format(int(person[0]) + int(person[1]), person[1])
-
+        person_number = "There are {} people, the number of men is {}, the number of women is {}.".format((int(person[0]) + int(person[1])), person[0], person[1])            
         print(person_number)
         module_speak.speak(person_number)
-        
+    
+    # Listen question   
     else:                    
-        #noise list
+        # Noise list
         noise_words = read_noise_word()
-        # make dict and gram files path
+        
+        # Make dict and gram files path
         dict_path = spr_dic_path
         gram_path = spr_gram_path
         
-        # if I have a question witch I can answer, count 1
+        # If I have a question witch I can answer, count 1
         while counter < 2:
             print("\n[*] LISTENING ...")
-            # setup live_speech
+            # Setup live_speech
             setup_live_speech(False, dict_path, gram_path, 1e-10)
             for question in live_speech:
                 if str(question) not in noise_words:
-                    if str(question) in qa_dict.keys():
+                    if str(question) in question_dictionary.keys():
                         print("\n-------your question--------\n",str(question),"\n----------------------------\n")
-                        print("\n-----------answer-----------\n",qa_dict[str(question)],"\n----------------------------\n")
+                        print("\n-----------answer-----------\n",question_dictionary[str(question)],"\n----------------------------\n")
                         pause()
-                        module_speak.speak(qa_dict[str(question)])
+                        module_speak.speak(question_dictionary[str(question)])
                         counter += 1
                         break
-                #noise
+                # noise
                 else:
                     print(".*._noise_.*.")
                     print("\n[*] LISTENING ...")
@@ -68,13 +69,13 @@ def QandA(person=None):
     #return counter
 
 
-
+# Stop lecognition
 def pause():
     global live_speech
     live_speech = LiveSpeech(no_search=True)
 
 
-# make noise list
+# Make noise list
 def read_noise_word():
     words = []
     with open(spr_gram_path) as f:
@@ -88,9 +89,7 @@ def read_noise_word():
             words = line.split("|")
     return words
 
-# setup livespeech
-
-
+# Setup livespeech
 def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
     global live_speech
     live_speech = LiveSpeech(lm=lm,

@@ -3,7 +3,7 @@ import wave
 import pyttsx3
 
 
-#speak content
+# Speak content
 def speak(content):
     print("[*] SPEAK : {0}".format(content),flush=True)
     engine=pyttsx3.init()
