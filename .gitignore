@@ -1,4 +1,4 @@
 # gitignore for sound_system
 ros2_function/__pycache__/
 *.pyc
-*.cfg
+
