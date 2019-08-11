@@ -16,10 +16,10 @@ hotword_gram_path = file_path.replace(
 
 # Detect hotword, "hey ducker"
 def detect():
-    print('[*] START HOTWORD RECOGNITION',flush=True)
+    print('[*] START HOTWORD RECOGNITION', flush=True)
     setup_live_speech(False, hotword_dic_path, hotword_gram_path, 1e-20)
     global live_speech
-    
+
     # If detect hotword, delete live_speech
     for phrase in live_speech:
         print(phrase)
@@ -30,6 +30,7 @@ def detect():
             break
             return 1
 
+
 # setup livespeech
 def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
     global live_speech
@@ -38,6 +39,7 @@ def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
                              dic=dict_path,
                              jsgf=jsgf_path,
                              kws_threshold=kws_threshold)
+
 
 if __name__ == '__main__':
     detect()

@@ -33,7 +33,7 @@ def QandA(person=None):
     # Speak the number of men and women, person = "the number of men|the number of women"
     if person != None:
         person = person.split("|")
-        person_number = "There are {} people, the number of men is {}, the number of women is {}.".format((int(person[0]) + int(person[1])), person[0], person[1])            
+        person_number = "There are {} people, the number of women is {}, the number of men is {}.".format((int(person[0]) + int(person[1])), person[0], person[1])            
         print(person_number)
         module_speak.speak(person_number)
     
