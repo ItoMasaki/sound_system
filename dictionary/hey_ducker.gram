@@ -1,4 +1,5 @@
 #JSGF V1.0;
 grammar hey_ducker;
-public <rule> = <command>;
+public <rule> = <command> | <noise>;
 <command> = hey ducker;
+<noise> = huy | hoy | hiy | heiy | hiey | dacker | duuker | daaker | dicker | hi | k | su | tu | se | me | to | o | ro | sa | v | l | mu | z | ma | li | n | na | h | mo | hu | w | f | a | le | t | ta | so | wo | ki | j | ti | lo | he | ru | ko | x | re | wu | ya | s | yo | no | g | ni | r | lu | ne | ha | ho | ke | ku | q | te | ra | nu | wa | la | p | ka;
