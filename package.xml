@@ -1,24 +1,19 @@
 <?xml version="1.0"?>
-    <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-	    <package format="2">
-	    <name>sound_system</name>
-	    <version>0.0.1</version>
-	    <description>SoundSystem using Python3</description>
-	
-    	<maintainer email="is0449sh@ed.ritsumei.ac.jp">Ito Masaki</maintainer>
-	    <license>Apache License 2.0</license>
-	
-    	<exec_depend>rclpy</exec_depend>
-	    <exec_depend>std_msgs</exec_depend>
-	
-    	<!-- These test dependencies are optional
-	    Their purpose is to make sure that the code passes the linters -->
-    	<test_depend>ament_copyright</test_depend>
-	    <test_depend>ament_flake8</test_depend>
-    	<test_depend>ament_pep257</test_depend>
-	    <test_depend>python3-pytest</test_depend>
-	
-    	<export>
-	    <build_type>ament_python</build_type>
-    </export>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>sound_system</name>
+  <version>0.0.0</version>
+  <description>an example of a python package</description>
+  <maintainer email="yamato19990708@gmail.com">matsudayamato</maintainer>
+  <license>TODO: License declaration</license>
+
+<!--   <exec_depend>モジュール名</exec_depend>   -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <export>
+<!--    <build_type>ament_python</build_type>     -->
+    <build_type>ament_python</build_type>
+  </export>
 </package>

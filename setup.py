@@ -7,11 +7,28 @@ setup(
     version='0.0.1',
     packages=[],
     py_modules=[
-        "sound_system",
+        'sound_system',
     ],
     install_requires=['setuptools'],
+    data_files=[
+        ('lib/' + package_name, ['package.xml']),
+        ('lib/' + package_name+'/ros2_function',
+         ['ros2_function/module_QandA.py',
+          'ros2_function/module_speak.py',
+          'ros2_function/module_angular.py',
+          'ros2_function/module_detect.py'
+          ]),
+        ('lib/sound_system/dictionary/',
+         ['dictionary/hey_ducker.dict',
+          'dictionary/hey_ducker.gram',
+          'dictionary/spr_question.dict',
+          'dictionary/spr_question.gram'
+          ]),
+        ('lib/sound_system/dictionary/QandA',
+            ['dictionary/QandA/qanda.csv'])
+    ],
     zip_safe=True,
-    author='ItoMasaki,MatudaYamato',
+    author='ItoMasaki,MatudaYamato,HiroseChihiro',
     author_email='is0449sh@ed.ritsumei.ac.jp',
     maintainer='ItoMasaki,MatsudaYamto',
     maintainer_email='is0449sh@ed.ritsumei.ac.jp,is0476hv@ed.ritsumei.ac.jp',
@@ -22,7 +39,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Software Development',
     ],
-    description='Examples of minimal publishers using rclpy.',
+    description='sound package for SPR',
     license='Apache License, Version 2.0',
     tests_require=['pytest'],
     entry_points={
@@ -31,5 +48,3 @@ setup(
         ],
     },
 )
-
-
