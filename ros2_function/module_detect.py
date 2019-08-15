@@ -9,9 +9,9 @@ model_path = get_model_path()
 
 # Define path
 hotword_dic_path = file_path.replace(
-    'ros2_function/module_detect.py', '/dictionary/hey_ducker.dict')
+    'ros2_function/module_detect.py', '/dictionary/hey_ducker_simple.dict')
 hotword_gram_path = file_path.replace(
-    'ros2_function/module_detect.py', '/dictionary/hey_ducker.gram')
+    'ros2_function/module_detect.py', '/dictionary/hey_ducker_simple.gram')
 
 
 # Detect hotword, "hey ducker"
