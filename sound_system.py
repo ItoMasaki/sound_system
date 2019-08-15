@@ -55,10 +55,10 @@ class SoundSystem(Node):
                 self.cerebrum_publisher('Return:0,Content:None')
 
         # Start QandA, an act of repeating 5 times
-        #content = ""
+        times = 0 
         if 'QandA' == command[0].replace('Command:', ''):
-            #content = command[1].replace('Content:', '')
-            if module_QandA.QandA() == 1:
+            times = int(command[1].replace('Content:', ''))
+            if module_QandA.QandA(times) == 1:
                     self.cerebrum_publisher('Retern:0,Content:None')   
             else:
                 self.cerebrum_publisher('Return:0.Content:None')

@@ -23,7 +23,7 @@ with open(csv_path, 'r') as f:
         question_dictionary.setdefault(str(line[0]), str(line[1]))
 
 # Listen question, or speak the number of men and women
-def QandA():
+def QandA(times):
 
     global counter
     global question_dictionary
@@ -48,7 +48,7 @@ def QandA():
     gram_path = spr_gram_path
     
     # If I have a question witch I can answer, count 1
-    while counter < 5:
+    while counter < times:
         print("\n[*] LISTENING ...")
         # Setup live_speech
         setup_live_speech(False, dict_path, gram_path, 1e-10)
@@ -67,6 +67,7 @@ def QandA():
                 print(".*._noise_.*.")
                 print("\n[*] LISTENING ...")
                 pass
+    counter = 0
     #counter += 1 
     #return counter
 
