@@ -23,8 +23,7 @@ class SoundSystem(Node):
         
         self.create_subscription(
             String, 'sound_system/command',
-            self.command_callback,
-            qos_profile_sensor_data)
+            self.command_callback)
 
     # recieve a command {Command, Content}
     def command_callback(self, msg):
@@ -56,16 +55,22 @@ class SoundSystem(Node):
                 self.cerebrum_publisher('Return:0,Content:None')
 
         # Start QandA, an act of repeating 5 times
+        content = ""
         if 'QandA' == command[0].replace('Command:', ''):
-            if module_QandA.QandA() == 1:
-                self.cerebrum_publisher('Retern:0,Content:None')
+            content = command[1].replace('Content:', '')
+            if content == "":
+                if module_QandA.QandA() == 1:
+                    self.cerebrum_publisher('Retern:0,Content:None')
+            elif content != "":
+                if module_QandA.QandA(content) == 1:
+                    self.cerebrum_publisher('Retern:0,Content:None')   
             else:
                 self.cerebrum_publisher('Return:0.Content:None')
 
     # Publish a result of an action
     def cerebrum_publisher(self, message):
         self.senses_publisher = self.create_publisher(
-            String, 'cerebrum/command', qos_profile_sensor_data)
+            String, 'cerebrum/command')
 
         _trans_message = String()
         _trans_message.data = message

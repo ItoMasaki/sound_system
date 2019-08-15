@@ -22,8 +22,9 @@ def detect():
 
     # If detect hotword, delete live_speech
     for phrase in live_speech:
-        print(phrase)
+        #print(phrase)
         if 'hey ducker' == str(phrase):
+            print(phrase)
             module_speak.speak('yes sir !')
             live_speech.stop = True
             del(live_speech)
