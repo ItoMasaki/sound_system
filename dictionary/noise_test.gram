@@ -1,0 +1,4 @@
+#JSGF V1.0;
+grammar noise_test;
+public <rule> = <command>;
+<command> = ;

@@ -47,11 +47,12 @@ def QandA(person=None):
         gram_path = spr_gram_path
         
         # If I have a question witch I can answer, count 1
-        while counter < 2:
+        while counter < 5:
             print("\n[*] LISTENING ...")
             # Setup live_speech
             setup_live_speech(False, dict_path, gram_path, 1e-10)
             for question in live_speech:
+                #print(question)
                 if str(question) not in noise_words:
                     if str(question) in question_dictionary.keys():
                         print("\n-------your question--------\n",str(question),"\n----------------------------\n")
@@ -84,9 +85,9 @@ def read_noise_word():
                 continue
             if "<rule>" in line:
                 continue
-            line = line.replace("<noise>", "").replace("=", "").replace(
-                " ", "").replace("\n", "").replace(";", "")
-            words = line.split("|")
+            line = line.replace("<noise>", "").replace(
+                    " = ", "").replace("\n", "").replace(";", "")
+            words = line.split(" | ")
     return words
 
 # Setup livespeech
