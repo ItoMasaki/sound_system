@@ -13,7 +13,7 @@ from ros2_function import module_detect
 from ros2_function import module_speak
 
 from std_msgs.msg import String
-
+import time
 
 class SoundSystem(Node):
     def __init__(self):
@@ -23,8 +23,11 @@ class SoundSystem(Node):
         
         self.create_subscription(
             String, 'sound_system/command',
-            self.command_callback)
+            self.command_callback,
+            qos_profile_sensor_data)
 
+        time.sleep(25)
+        self.starter()
     # recieve a command {Command, Content}
     def command_callback(self, msg):
 
@@ -33,11 +36,10 @@ class SoundSystem(Node):
         
         # Detect hotword, "hey ducker"
         if 'detect' == command[0].replace('Command:', ''):
-            if module_detect.detect() == 1:
+            print('detect',flush=True)
+            mit = module_detect.detect()
+            if mit == 1:
                 self.cerebrum_publisher('Return:1,Content:None')
-            else:
-                self.cerebrum_publisher('Return:0,Content:None')
-        
         # Speak a content
         if 'speak' == command[0].replace('Command:', ''):
             if module_speak.speak(command[1].replace('Content:', '')) == 1:
@@ -66,7 +68,7 @@ class SoundSystem(Node):
     # Publish a result of an action
     def cerebrum_publisher(self, message):
         self.senses_publisher = self.create_publisher(
-            String, 'cerebrum/command')
+            String, 'cerebrum/command',qos_profile_sensor_data)
 
         _trans_message = String()
         _trans_message.data = message
@@ -74,6 +76,9 @@ class SoundSystem(Node):
         self.senses_publisher.publish(_trans_message)
         # self.destroy_publisher(self.senses_publisher)
 
+    def starter(self):
+        if module_detect.detect() == 1:
+            self.cerebrum_publisher('Return:1,Content:None')
 
 def main():
     rclpy.init()

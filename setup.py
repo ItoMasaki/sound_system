@@ -7,7 +7,7 @@ setup(
     version='0.0.1',
     packages=[],
     py_modules=[
-        'sound_system',
+        'sound_system'
     ],
     install_requires=['setuptools'],
     data_files=[
