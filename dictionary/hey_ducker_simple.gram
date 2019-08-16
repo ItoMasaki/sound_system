@@ -2,4 +2,4 @@
 grammar hey_ducker;
 public <rule> = <command> | <noise>;
 <command> = hey ducker;
-<noise> = hi | k | su | tu | se | me | to | o | ro | sa | v | l | mu | z | ma | li | n | na | h | mo | hu | w | f | a | le | t | ta | so | wo | ki | j | ti | lo | he | ru | ko | x | re | wu | ya | s | yo | no | g | ni | r | lu | ne | ha | ho | ke | ku | q | te | ra | nu | wa | la | p | ka;
+<noise> = hi | k | su | tu | se | me | to | o | ro | sa | v | l | mu | z | ma | li;

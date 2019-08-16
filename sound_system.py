@@ -1,7 +1,6 @@
 import os
 import struct
 import sys
-import time
 
 import rclpy
 from rclpy.node import Node
@@ -13,7 +12,7 @@ from ros2_function import module_detect
 from ros2_function import module_speak
 
 from std_msgs.msg import String
-import time
+from time import sleep
 
 class SoundSystem(Node):
     def __init__(self):
@@ -25,8 +24,9 @@ class SoundSystem(Node):
             String, 'sound_system/command',
             self.command_callback,
             qos_profile_sensor_data)
-
-        time.sleep(25)
+            
+        print("Now preparing...")
+        sleep(10)
         self.starter()
     # recieve a command {Command, Content}
     def command_callback(self, msg):
@@ -68,7 +68,10 @@ class SoundSystem(Node):
     # Publish a result of an action
     def cerebrum_publisher(self, message):
         self.senses_publisher = self.create_publisher(
-            String, 'cerebrum/command',qos_profile_sensor_data)
+            String, 'cerebrum/command',
+            qos_profile_sensor_data)
+        
+        sleep(2)
 
         _trans_message = String()
         _trans_message.data = message

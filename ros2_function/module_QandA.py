@@ -2,6 +2,7 @@ import os
 from pocketsphinx import LiveSpeech, get_model_path
 import csv
 from .import module_speak
+import datetime
 
 counter = 0
 question_dictionary = {}
@@ -16,6 +17,8 @@ spr_gram_path = file_path.replace(
 model_path = get_model_path()
 csv_path = file_path.replace(
     'ros2_function/module_QandA.py', 'dictionary/QandA/qanda.csv')
+result_path = file_path.replace(
+    'ros2_function/module_QandA.py', 'dictionary/QandA/{}.txt').format(str(datetime.datetime.now()))
 
 # Make a dictionary from a csv file
 with open(csv_path, 'r') as f:
@@ -56,6 +59,9 @@ def QandA(times):
             #print(question)
             if str(question) not in noise_words:
                 if str(question) in question_dictionary.keys():
+                    file = open(result_path, 'a')
+                    file.write(str(datetime.datetime.now())+": "+str(question)+", "+str(question_dictionary[str(question)])+"\n")
+                    file.close()
                     print("\n-------your question--------\n",str(question),"\n----------------------------\n")
                     print("\n-----------answer-----------\n",question_dictionary[str(question)],"\n----------------------------\n")
                     pause()
