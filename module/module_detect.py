@@ -9,13 +9,14 @@ model_path = get_model_path()
 
 # Define path
 hotword_dic_path = file_path.replace(
-    'ros2_function/module_detect.py', '/dictionary/hey_ducker_simple.dict')
+    'module/module_detect.py', '/dictionary/hey_ducker_simple.dict')
 hotword_gram_path = file_path.replace(
-    'ros2_function/module_detect.py', '/dictionary/hey_ducker_simple.gram')
+    'module/module_detect.py', '/dictionary/hey_ducker_simple.gram')
 
 
 # Detect hotword, "hey ducker"
 def detect():
+
     print('[*] START HOTWORD RECOGNITION', flush=True)
     setup_live_speech(False, hotword_dic_path, hotword_gram_path, 1e-20)
     global live_speech

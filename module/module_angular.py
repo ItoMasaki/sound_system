@@ -17,9 +17,9 @@ model_path = get_model_path()
 
 # Define path
 hotword_dic_path = file_path.replace(
-    'ros2_function/module_angular.py', '/dictionary/hey_ducker.dict')
+    'module/module_angular.py', '/dictionary/hey_ducker.dict')
 hotword_gram_path = file_path.replace(
-    'ros2_function/module_angular.py', '/dictionary/hey_ducker.gram')
+    'module/module_angular.py', '/dictionary/hey_ducker.gram')
 
 # PARAMETERS for sound localization
 PARAMETERS = {

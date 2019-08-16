@@ -13,11 +13,11 @@ txt_file = input('加えたいノイズ１欄のtxtファイル名を入力し�
 file_path = os.path.abspath(__file__)
 
 # Define path
-PATH0 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'QandA/{}.csv').format(csv_file) # 用意したq&aファイルの絶対パス
-PATH1 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'dictionary/cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
-PATH2 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'dictionary/{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
-PATH3 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'dictionary/{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
-PATH4 = file_path.replace('setup_modules/gram_maker_from_csv.py', 'dictionary/{}.txt').format(txt_file) # 用意したノイズファイルの絶対パス
+PATH0 = file_path.replace('tools/gram_maker_from_csv.py', 'dictionary/QandA/{}.csv').format(csv_file) # 用意したq&aファイルの絶対パス
+PATH1 = file_path.replace('tools/gram_maker_from_csv.py', 'dictionary/cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
+PATH2 = file_path.replace('tools/gram_maker_from_csv.py', 'dictionary/{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
+PATH3 = file_path.replace('tools/gram_maker_from_csv.py', 'dictionary/{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
+PATH4 = file_path.replace('tools/gram_maker_from_csv.py', 'dictionary/noise/{}.txt').format(txt_file) # 用意したノイズファイルの絶対パス
 
 if os.path.exists(PATH2):
     print("同じ辞書名が存在します。")

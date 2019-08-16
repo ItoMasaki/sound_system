@@ -6,10 +6,10 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 
-from ros2_function import module_angular
-from ros2_function import module_QandA
-from ros2_function import module_detect
-from ros2_function import module_speak
+from module import module_angular
+from module import module_QandA
+from module import module_detect
+from module import module_speak
 
 from std_msgs.msg import String
 from time import sleep
@@ -27,7 +27,10 @@ class SoundSystem(Node):
             
         print("Now preparing...")
         sleep(10)
+        
+        # [TODO] fix
         self.starter()
+        
     # recieve a command {Command, Content}
     def command_callback(self, msg):
 
@@ -73,6 +76,7 @@ class SoundSystem(Node):
         self.senses_publisher.publish(_trans_message)
         # self.destroy_publisher(self.senses_publisher)
 
+    # [TODO] fix
     def starter(self):
         if module_detect.detect() == 1:
             self.cerebrum_publisher('Return:1,Content:None')

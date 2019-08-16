@@ -11,14 +11,14 @@ file_path = os.path.abspath(__file__)
 
 # Define path
 spr_dic_path = file_path.replace(
-    'ros2_function/module_QandA.py', 'dictionary/spr_question.dict')
+    'module/module_QandA.py', 'dictionary/spr_question.dict')
 spr_gram_path = file_path.replace(
-    'ros2_function/module_QandA.py', 'dictionary/spr_question.gram')
+    'module/module_QandA.py', 'dictionary/spr_question.gram')
 model_path = get_model_path()
 csv_path = file_path.replace(
-    'ros2_function/module_QandA.py', 'dictionary/QandA/qanda.csv')
+    'module/module_QandA.py', 'dictionary/QandA/qanda.csv')
 result_path = file_path.replace(
-    'ros2_function/module_QandA.py', 'dictionary/QandA/{}.txt').format(str(datetime.datetime.now()))
+    'module/module_QandA.py', 'dictionary/QandA/{}.txt').format(str(datetime.datetime.now()))
 
 # Make a dictionary from a csv file
 with open(csv_path, 'r') as f:

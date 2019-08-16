@@ -12,11 +12,11 @@ setup(
     install_requires=['setuptools'],
     data_files=[
         ('lib/' + package_name, ['package.xml']),
-        ('lib/' + package_name+'/ros2_function',
-         ['ros2_function/module_QandA.py',
-          'ros2_function/module_speak.py',
-          'ros2_function/module_angular.py',
-          'ros2_function/module_detect.py'
+        ('lib/' + package_name+'/module',
+         ['module/module_QandA.py',
+          'module/module_speak.py',
+          'module/module_angular.py',
+          'module/module_detect.py'
           ]),
         ('lib/sound_system/dictionary/',
          ['dictionary/hey_ducker_simple.dict',

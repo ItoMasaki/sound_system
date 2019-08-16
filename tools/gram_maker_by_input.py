@@ -8,9 +8,9 @@ name = input("作りたい辞書の名前を入力してください:")
 file_path = os.path.abspath(__file__)
 
 # Define path
-PATH1 = file_path.replace('setup_modules/gram_maker_by_input.py', 'dictionary/cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
-PATH2 = file_path.replace('setup_modules/gram_maker_by_input.py', 'dictionary/{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
-PATH3 = file_path.replace('setup_modules/gram_maker_by_input.py', 'dictionary/{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
+PATH1 = file_path.replace('tools/gram_maker_by_input.py', 'dictionary/cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
+PATH2 = file_path.replace('ttols/gram_maker_by_input.py', 'dictionary/{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
+PATH3 = file_path.replace('tools/gram_maker_by_input.py', 'dictionary/{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
 
 if os.path.exists(PATH2):
 	print("同じ辞書名が存在します。")

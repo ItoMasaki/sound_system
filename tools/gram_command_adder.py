@@ -8,9 +8,9 @@ name = input("質問文を追加したい辞書の名前を入力してくださ
 file_path = os.path.abspath(__file__)
 
 # Define path
-PATH1 = file_path.replace('setup_modules/gram_command_adder.py', 'dictionary/cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
-PATH2 = file_path.replace('setup_modules/gram_command_adder.py', 'dictionary/{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
-PATH3 = file_path.replace('setup_modules/gram_command_adder.py', 'dictionary/{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
+PATH1 = file_path.replace('tools/gram_command_adder.py', 'dictionary/cmudict-en-us.dict') # pocketsphinxの元の辞書の絶対パス
+PATH2 = file_path.replace('tools/gram_command_adder.py', 'dictionary/{}.dict').format(name) # pocketsphinxの作りたい辞書の絶対パス
+PATH3 = file_path.replace('tools/gram_command_adder.py', 'dictionary/{}.gram').format(name) # pocketsphinxの作りたい文法辞書の絶対パス
 
 if os.path.exists(PATH2):
     print("===============================================================")
