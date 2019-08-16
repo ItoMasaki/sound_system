@@ -37,15 +37,13 @@ class SoundSystem(Node):
         # Detect hotword, "hey ducker"
         if 'detect' == command[0].replace('Command:', ''):
             print('detect',flush=True)
-            mit = module_detect.detect()
-            if mit == 1:
+            if module_detect.detect() == 1:
                 self.cerebrum_publisher('Return:1,Content:None')
+                
         # Speak a content
         if 'speak' == command[0].replace('Command:', ''):
             if module_speak.speak(command[1].replace('Content:', '')) == 1:
                 self.cerebrum_publisher('Return:1,Content:None')
-            else:
-                self.cerebrum_publisher('Return:0,Content:None')
         
         # Sound localization
         if 'angular' == command[0].replace('Command:', ''):
@@ -53,18 +51,14 @@ class SoundSystem(Node):
             if self.temp_angular > 0:
                 self.cerebrum_publisher(
                     'Return:1,Content:'+str(self.temp_angular))
-            else:
-                self.cerebrum_publisher('Return:0,Content:None')
 
         # Start QandA, an act of repeating 5 times
         times = 0 
         if 'QandA' == command[0].replace('Command:', ''):
             times = int(command[1].replace('Content:', ''))
             if module_QandA.QandA(times) == 1:
-                    self.cerebrum_publisher('Retern:0,Content:None')   
-            else:
-                self.cerebrum_publisher('Return:0.Content:None')
-
+                    self.cerebrum_publisher('Retern:0,Content:None')
+                    
     # Publish a result of an action
     def cerebrum_publisher(self, message):
         self.senses_publisher = self.create_publisher(
@@ -82,6 +76,7 @@ class SoundSystem(Node):
     def starter(self):
         if module_detect.detect() == 1:
             self.cerebrum_publisher('Return:1,Content:None')
+
 
 def main():
     rclpy.init()

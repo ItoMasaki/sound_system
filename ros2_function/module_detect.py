@@ -29,7 +29,7 @@ def detect():
             live_speech.stop = True
             del(live_speech)
             break
-            return 1
+    return 1
 
 
 # setup livespeech

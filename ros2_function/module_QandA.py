@@ -74,6 +74,7 @@ def QandA(times):
                 print("\n[*] LISTENING ...")
                 pass
     counter = 0
+    return 1
     #counter += 1 
     #return counter
 
