@@ -16,10 +16,10 @@ file_path = os.path.abspath(__file__)
 model_path = get_model_path()
 
 # Define path
-hotword_dic_path = file_path.replace(
-    'module/module_angular.py', '/dictionary/hey_ducker.dict')
-hotword_gram_path = file_path.replace(
-    'module/module_angular.py', '/dictionary/hey_ducker.gram')
+spr_dic_path = file_path.replace(
+    'module/module_angular.py', '/dictionary/spr_question.dict')
+spr_gram_path = file_path.replace(
+    'module/module_angular.py', '/dictionary/spr_question.gram')
 
 # PARAMETERS for sound localization
 PARAMETERS = {
@@ -36,19 +36,28 @@ def angular():
     
     setup_live_speech(
         False,
-        hotword_dic_path,
-        hotword_gram_path,
-        1e-20)
-        
+        spr_dic_path,
+        spr_gram_path,
+        1e-10)
+    
     while True:
         counter = 0
         if read('SPEECHDETECTED') == 1:
-            for kw in live_speech:
+            for question in live_speech:
                 angular = direction()
-                if kw != ' ':
-                    counter += 1
-                    print(str(counter) + ':' + str(angular), flush=True)
-                    return angular
+                #print(question)
+                if str(question) not in noise_words:
+                    if str(question) in question_dictionary.keys():
+                        counter += 1
+                        print(str(counter) + ':' + str(angular), flush=True)
+                        return angular
+
+                # noise
+                else:
+                    #print(".*._noise_.*.")
+                    #print("\n[*] LISTENING ...")
+                    pass
+
 
 def read(param_name):
 
