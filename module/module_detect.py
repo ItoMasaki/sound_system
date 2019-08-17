@@ -9,10 +9,9 @@ model_path = get_model_path()
 
 # Define path
 hotword_dic_path = file_path.replace(
-    'module/module_detect.py', '/dictionary/hey_ducker_simple.dict')
+    'module/module_detect.py', '/dictionary/hey_ducker.dict')
 hotword_gram_path = file_path.replace(
-    'module/module_detect.py', '/dictionary/hey_ducker_simple.gram')
-
+    'module/module_detect.py', '/dictionary/hey_ducker.gram')
 
 # Detect hotword, "hey ducker"
 def detect():
@@ -31,7 +30,6 @@ def detect():
             del(live_speech)
             break
     return 1
-
 
 # setup livespeech
 def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):

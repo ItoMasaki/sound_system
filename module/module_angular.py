@@ -16,10 +16,8 @@ file_path = os.path.abspath(__file__)
 model_path = get_model_path()
 
 # Define path
-spr_dic_path = file_path.replace(
-    'module/module_angular.py', '/dictionary/spr_question.dict')
 spr_gram_path = file_path.replace(
-    'module/module_angular.py', '/dictionary/spr_question.gram')
+    'module/module_QandA.py', 'dictionary/spr_question.gram')
 
 # PARAMETERS for sound localization
 PARAMETERS = {
@@ -31,33 +29,49 @@ PARAMETERS = {
 TIMEOUT = 100000
 
 # Find angular
-def angular():
+def angular(dictionary):
     global live_speech
+    
+    # Noise list
+    noise_words = read_noise_word()
     
     setup_live_speech(
         False,
-        spr_dic_path,
-        spr_gram_path,
+        file_path.replace('module/module_angular.py',
+                          '/dictionary/{}.dict').format(str(dictionary)),
+        file_path.replace('module/module_angular.py',
+                          '/dictionary/{}.gram').format(str(dictionary)),
         1e-10)
     
     while True:
         counter = 0
         if read('SPEECHDETECTED') == 1:
-            for question in live_speech:
+            for phrase in live_speech:
                 angular = direction()
-                #print(question)
-                if str(question) not in noise_words:
-                    if str(question) in question_dictionary.keys():
+                #print(phrase)
+                if str(dintionary) == "spr_question":
+                    if str(phrase) not in noise_words:
                         counter += 1
                         print(str(counter) + ':' + str(angular), flush=True)
                         return angular
 
-                # noise
-                else:
-                    #print(".*._noise_.*.")
-                    #print("\n[*] LISTENING ...")
-                    pass
+                elif str(dintionary) == "hey_ducker":
+                    if 'hey ducker' == str(phrase):
+                        print("angular" + ':' + str(angular), flush=True)
+                        return angular
 
+def read_noise_word():
+    words = []
+    with open(spr_gram_path) as f:
+        for line in f.readlines():
+            if "<noise>" not in line:
+                continue
+            if "<rule>" in line:
+                continue
+            line = line.replace("<noise>", "").replace(
+                    " = ", "").replace("\n", "").replace(";", "")
+            words = line.split(" | ")
+    return words
 
 def read(param_name):
 
