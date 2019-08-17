@@ -49,17 +49,25 @@ class SoundSystem(Node):
                 self.cerebrum_publisher('Return:1,Content:None')
         
         # Sound localization
+        # [TODO] check content:
+        dictionary = ""
         if 'angular' == command[0].replace('Command:', ''):
-            self.temp_angular = module_angular.angular()
+            dictionary = command[1].replace('Content:', '')
+            self.temp_angular = module_angular.angular(dictionary)
             if self.temp_angular > 0:
                 self.cerebrum_publisher(
                     'Return:1,Content:'+str(self.temp_angular))
 
         # Start QandA, an act of repeating 5 times
-        times = 0 
+        content = 0 
         if 'QandA' == command[0].replace('Command:', ''):
-            times = int(command[1].replace('Content:', ''))
-            if module_QandA.QandA(times) == 1:
+            content = command[1].replace('Content:', '')
+            if "|" in str(content):
+                if module_QandA.QandA(content) == 1:
+                    self.cerebrum_publisher('Retern:0,Content:None')
+            else:
+                content = int(content)
+                if module_QandA.QandA(content) == 1:
                     self.cerebrum_publisher('Retern:0,Content:None')
                     
     # Publish a result of an action

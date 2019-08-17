@@ -19,8 +19,8 @@ setup(
           'module/module_detect.py'
           ]),
         ('lib/sound_system/dictionary/',
-         ['dictionary/hey_ducker_simple.dict',
-          'dictionary/hey_ducker_simple.gram',
+         ['dictionary/hey_ducker.dict',
+          'dictionary/hey_ducker.gram',
           'dictionary/spr_question.dict',
           'dictionary/spr_question.gram'
           ]),
