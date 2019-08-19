@@ -30,7 +30,18 @@ with open(csv_path, 'r') as f:
         question_dictionary.setdefault(str(line[0]), str(line[1]))
 
 # Listen question, or speak the number of men and women
-def QandA(times):
+def QandA(number):
+
+    ###############
+    #
+    # use this module at spr section >> | the number of person or Q&A
+    #
+    # param >> number: | the number of people (wemen|men) 
+    #                  | how many times do you want to do Q&A 
+    #
+    # return >> 1
+    #
+    ###############
 
     global counter
     global question_dictionary
@@ -39,9 +50,9 @@ def QandA(times):
 
     # Speak the number of men and women, person = "the number of men|the number of women"
 
-    if "|" in str(times):
-        times = times.split("|")
-        person_number = "There are {} people, the number of women is {}, the number of men is {}.".format((int(times[0]) + int(times[1])), times[0], times[1])            
+    if "|" in str(number):
+        number = number.split("|")
+        person_number = "There are {} people, the number of women is {}, the number of men is {}.".format((int(number[0]) + int(number[1])), number[0], number[1])            
         print(person_number)
         module_speak.speak(person_number)
 
@@ -50,17 +61,13 @@ def QandA(times):
         # Noise list
         noise_words = read_noise_word()
         
-        # Make dict and gram files path
-        dict_path = spr_dic_path
-        gram_path = spr_gram_path
-        
         # If I have a question witch I can answer, count 1
-        while counter < times:
+        while counter < number:
             print("\n[*] LISTENING ...")
             # Setup live_speech
-            setup_live_speech(False, dict_path, gram_path, 1e-10)
+            setup_live_speech(False, spr_dic_path, spr_gram_path, 1e-10)
             for question in live_speech:
-                print(question)
+                #print(question)
                 if str(question) not in noise_words:
                     cos = 0
                     max = 0
@@ -68,7 +75,7 @@ def QandA(times):
                         cos = calc_cos(str(question),question_key)
                         if cos > max:
                             max = cos
-                            print(max)
+                            #print(max)
                     if max > 0.8:
                         file = open(result_path, 'a')
                         file.write(str(datetime.datetime.now())+": "+str(question)+", "+str(question_dictionary[str(question)])+"\n")
@@ -97,18 +104,35 @@ def QandA(times):
                     pass
     counter = 0
     return 1
-    #counter += 1 
-    #return counter
 
-
-# Stop lecognition
 def pause():
+
+    ###############
+    #
+    # use this module to stop lecognition
+    #
+    # param >> None
+    #
+    # return >> None 
+    #
+    ###############
+
     global live_speech
     live_speech = LiveSpeech(no_search=True)
 
 
-# Make noise list
 def read_noise_word():
+
+    ###############
+    #
+    # use this module to put noise to list
+    #
+    # param >> None
+    #
+    # return >> words: list in noises
+    #
+    ###############
+
     words = []
     with open(spr_gram_path) as f:
         for line in f.readlines():
@@ -121,8 +145,22 @@ def read_noise_word():
             words = line.split(" | ")
     return words
 
-# Setup livespeech
+
 def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
+
+    ###############
+    #
+    # use this module to set live speech parameter
+    #
+    # param >> lm: False >> means useing own dict and gram
+    # param >> dict_path: ~.dict file's path
+    # param >> jsgf_path: ~.gram file's path
+    # param >> kws_threshold: mean's confidence (1e-○)
+    #
+    # return >> None
+    #
+    ###############
+
     global live_speech
     live_speech = LiveSpeech(lm=lm,
                              hmm=os.path.join(model_path, 'en-us'),
@@ -130,8 +168,19 @@ def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
                              jsgf=jsgf_path,
                              kws_threshold=kws_threshold)
 
-#Define degree of similarity
 def calc_cos(A,B):
+
+    ###############
+    #
+    # use this module to define degree of similarity
+    #
+    # param >> A: first sentence
+    # param >> B: second sentence
+    #
+    # return >> cos: degree of similarity
+    #
+    ###############
+
     list_A = []
     list_B = []
     list_A = A.split(" ")
@@ -151,4 +200,4 @@ def calc_cos(A,B):
     return cos
 
 if __name__ == '__main__':
-    QandA()
+    QandA(1)

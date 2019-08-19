@@ -30,6 +30,17 @@ TIMEOUT = 100000
 
 # Find angular
 def angular(dictionary):
+
+    ###############
+    #
+    # use this module to find angular
+    #
+    # param >> dictionary: dict and gram file's name
+    #
+    # return >> angular
+    #
+    ###############
+    
     global live_speech
     
     # Noise list
@@ -61,6 +72,17 @@ def angular(dictionary):
                         return angular
 
 def read_noise_word():
+    
+    ###############
+    #
+    # use this module to put noise to list
+    #
+    # param >> None
+    #
+    # return >> words: list in noises
+    #
+    ###############
+    
     words = []
     with open(spr_gram_path) as f:
         for line in f.readlines():
@@ -107,6 +129,20 @@ def direction():
 
 # Setup livespeech
 def setup_live_speech(lm, dict_path, jsgf_path, kws_threshold):
+    
+    ###############
+    #
+    # use this module to set live speech parameter
+    #
+    # param >> lm: False >> means useing own dict and gram
+    # param >> dict_path: ~.dict file's path
+    # param >> jsgf_path: ~.gram file's path
+    # param >> kws_threshold: mean's confidence (1e-○)
+    #
+    # return >> None
+    #
+    ###############
+    
     global live_speech
     live_speech = LiveSpeech(lm=lm,
                              hmm=os.path.join(model_path, 'en-us'),
