@@ -16,7 +16,8 @@ setup(
          ['module/module_QandA.py',
           'module/module_speak.py',
           'module/module_angular.py',
-          'module/module_detect.py'
+          'module/module_detect.py',
+          'module/module_restaurant.py'
           ]),
         ('lib/sound_system/dictionary/',
          ['dictionary/hey_ducker.dict',
@@ -25,8 +26,8 @@ setup(
           'dictionary/spr_question.gram',
           'dictionary/yes_no.dict',
           'dictionary/yes_no.gram',
-          'dictionary/restaurant_order.dict',
-          'dictionary/restaurant_order.gram'
+          'dictionary/restaurant.dict',
+          'dictionary/restaurant.gram',
           ]),
         ('lib/sound_system/dictionary/QandA',
             ['dictionary/QandA/qanda.csv'])
