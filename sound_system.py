@@ -1,7 +1,3 @@
-import os
-import struct
-import sys
-
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
@@ -10,6 +6,7 @@ from module import module_angular
 from module import module_QandA
 from module import module_detect
 from module import module_speak
+from module import module_restaurant
 
 from std_msgs.msg import String
 from time import sleep
@@ -23,13 +20,14 @@ class SoundSystem(Node):
         self.create_subscription(
             String, 'sound_system/command',
             self.command_callback,
-            qos_profile_sensor_data)
-            
-        print("Now preparing...")
-        sleep(10)
+            qos_profile_sensor_data
+        )
+        
+        #print("Now preparing...")
+        #sleep(10)
         
         # [TODO] fix
-        self.starter()
+        #self.starter()
         
     # recieve a command {Command, Content}
     def command_callback(self, msg):
@@ -49,7 +47,7 @@ class SoundSystem(Node):
                 self.cerebrum_publisher('Return:1,Content:None')
         
         # Sound localization
-        # [TODO] check content:
+        # [TODO] check >> content is dictionary's name
         dictionary = ""
         if 'angular' == command[0].replace('Command:', ''):
             dictionary = command[1].replace('Content:', '')
@@ -59,7 +57,7 @@ class SoundSystem(Node):
                     'Return:1,Content:'+str(self.temp_angular))
 
         # Start QandA, an act of repeating 5 times
-        content = 0 
+        content = 0
         if 'QandA' == command[0].replace('Command:', ''):
             content = command[1].replace('Content:', '')
             if "|" in str(content):
@@ -70,11 +68,27 @@ class SoundSystem(Node):
                 if module_QandA.QandA(content) == 1:
                     self.cerebrum_publisher('Retern:0,Content:None')
                     
+        # Start QandA, an act of repeating 5 times
+        when = ""
+        if 'restaurant' == command[0].replace('Command:', ''):
+            when = command[1].replace('Content:', '')
+            
+            if str(when) == "first":
+                if module_restaurant.restaurant(when) == "restart":
+                    self.cerebrum_publisher('Retern:0,Content:restart')
+                else:
+                    # content is food's name
+                    self.cerebrum_publisher('Retern:0,Content:'+str(module_restaurant.restaurant(when)))
+            elif str(when) == "end":
+                if module_restaurant.restaurant(when) == 1:
+                    self.cerebrum_publisher('Retern:0,Content:None')
+                    
     # Publish a result of an action
     def cerebrum_publisher(self, message):
         self.senses_publisher = self.create_publisher(
             String, 'cerebrum/command',
-            qos_profile_sensor_data)
+            qos_profile_sensor_data
+        )
         
         sleep(2)
 

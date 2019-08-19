@@ -5,6 +5,17 @@ import pyttsx3
 
 # Speak content
 def speak(content):
+
+    ###############
+    #
+    # use this module to speak param
+    #
+    # param >> content: speak this content
+    #
+    # return >> None
+    #
+    ###############
+
     print("[*] SPEAK : {0}".format(content),flush=True)
     engine=pyttsx3.init()
     rate=engine.getProperty('rate')
