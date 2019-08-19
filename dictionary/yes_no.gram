@@ -1,0 +1,5 @@
+#JSGF V1.0;
+grammar yes_no;
+public <rule> = <command> | <noise>;
+<command> = yes | no | please say again;
+<noise> = ho | ke | ni | ka | f | t | k | x | ro | a | nu | su | wu | l | ha | ra | na | sa | ta | h | lu | wo | n | ne | o | hu | j | wa | w | ki | le | so | v | hi | li | p | s | ma | te | tu | la | to | me | ti | q | ko | lo | g | re | z | he | ku | mo | mu | ru | ya | yo | se | r;

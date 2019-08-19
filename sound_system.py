@@ -10,6 +10,7 @@ from module import module_angular
 from module import module_QandA
 from module import module_detect
 from module import module_speak
+from module import module_restaurant
 
 from std_msgs.msg import String
 from time import sleep
@@ -22,14 +23,13 @@ class SoundSystem(Node):
         
         self.create_subscription(
             String, 'sound_system/command',
-            self.command_callback,
-            qos_profile_sensor_data)
+            self.command_callback)
             
-        print("Now preparing...")
-        sleep(10)
+        #print("Now preparing...")
+        #sleep(10)
         
         # [TODO] fix
-        self.starter()
+        #self.starter()
         
     # recieve a command {Command, Content}
     def command_callback(self, msg):
@@ -70,11 +70,26 @@ class SoundSystem(Node):
                 if module_QandA.QandA(content) == 1:
                     self.cerebrum_publisher('Retern:0,Content:None')
                     
+        # Start QandA, an act of repeating 5 times
+        when = "" 
+        if 'restaurant' == command[0].replace('Command:', ''):
+            when = command[1].replace('Content:', '')
+            
+            if str(when) == "first":
+                if module_restaurant.restaurant(when) == "restart":
+                    self.cerebrum_publisher('Retern:0,Content:restart')
+                else:
+                
+                    # content is food's name
+                    self.cerebrum_publisher('Retern:0,Content:'+str(module_restaurant.restaurant(when)))
+            elif str(when) == "end":
+                if module_restaurant.restaurant(when) == 1:
+                    self.cerebrum_publisher('Retern:0,Content:None')
+                    
     # Publish a result of an action
     def cerebrum_publisher(self, message):
         self.senses_publisher = self.create_publisher(
-            String, 'cerebrum/command',
-            qos_profile_sensor_data)
+            String, 'cerebrum/command')
         
         sleep(2)
 

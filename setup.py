@@ -22,7 +22,11 @@ setup(
          ['dictionary/hey_ducker.dict',
           'dictionary/hey_ducker.gram',
           'dictionary/spr_question.dict',
-          'dictionary/spr_question.gram'
+          'dictionary/spr_question.gram',
+          'dictionary/yes_no.dict',
+          'dictionary/yes_no.gram',
+          'dictionary/restaurant_order.dict',
+          'dictionary/restaurant_order.gram'
           ]),
         ('lib/sound_system/dictionary/QandA',
             ['dictionary/QandA/qanda.csv'])
