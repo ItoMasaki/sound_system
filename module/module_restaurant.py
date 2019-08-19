@@ -316,7 +316,7 @@ if __name__ == '__main__':
     if str(last_order) != "restart" and last_order != 1:
         print("Simulation: Going back to the first position ...")
         sleep(3)
-        last_sentence = "Please put "+last_order+" on me, thank you."
+        last_sentence = "order is "+last_order+", please put "+last_order+" on me, thank you."
         
         print(last_sentence)
         module_speak.speak(last_sentence)
